@@ -1,0 +1,10 @@
+[
+  {
+    "consumer_id": 42,
+    "beverage_id": 23
+  },
+  {
+    "consumer_id": 21,
+    "beverage_id": 5
+  }
+]

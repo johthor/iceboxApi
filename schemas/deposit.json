@@ -1,0 +1,9 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Deposit",
+  "id": "http://http://chaotikum.org/hackerspace:nbsp/icebox/schemas/deposit.json",
+  "description": "One deposit amount",
+  "type": "number",
+  "required": true
+}
+

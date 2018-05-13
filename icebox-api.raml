@@ -1,0 +1,222 @@
+#%RAML 0.8
+---
+title: Icebox Service
+version: v0
+baseUri: http://chaotikum.org/hackerspace:nbsp/icebox/{version}
+mediaType: application/json
+documentation:
+  - title: Home
+    content: !include documentation/home.md
+
+schemas:
+  - beverage: !include schemas/beverage.json
+  - consumer: !include schemas/consumer.json
+  - deposit: !include schemas/deposit.json
+
+traits:
+  - searchable:
+      queryParameters:
+        find:
+          description: |
+            JSON array [{"field1","value1","operator1"},{"field2","value2","operator2"},...,{"fieldN","valueN","operatorN"}] <<description>>
+          example: |
+            <<example>>
+  - orderable:
+      queryParameters:
+        orderBy:
+          description: |
+            Order by field: <<fieldsList>>
+          type: string
+          required: false
+        order:
+          description: Order
+          enum: [desc, asc]
+          default: desc
+          required: false
+  - pageable:
+      queryParameters:
+        offset:
+          description: Skip over a number of elements by specifying an offset value for the query
+          type: integer
+          required: false
+          example: 20
+          default: 0
+        limit:
+          description: Limit the number of elements on the response
+          type: integer
+          required: false
+          example: 80
+          default: 20
+
+resourceTypes:
+  - readOnlyCollection:
+      usage: This resourceType should only be used for read only collections of entities
+      description: Collection of available <<resourcePathName>> in Icebox.
+      get:
+        description: Get a list of <<resourcePathName>>.
+        responses:
+          200:
+            body:
+              application/json:
+                example: |
+                  <<exampleCollection>>
+  - collection:
+      usage: This resourceType should be used for any collection of entities
+      description: Collection of available <<resourcePathName>> in Icebox.
+      get:
+        description: Get a list of <<resourcePathName>>.
+        responses:
+          200:
+            body:
+              application/json:
+                example: |
+                  <<exampleCollection>>
+      post:
+        description: |
+          Add a new <<resourcePathName|!singularize>> to Icebox.
+        queryParameters:
+          access_token:
+            description: "The access token provided by the authentication application"
+            example: AABBCCDD
+            required: true
+            type: string
+        body:
+          application/json:
+            schema: <<resourcePathName|!singularize>>
+            example: |
+              <<exampleItem>>
+        responses:
+          200:
+            body:
+              application/json:
+                example: |
+                  { "message": "The <<resourcePathName|!singularize>> has been properly entered" }
+  - readOnlyEntity:
+      usage: This resourceType should only be used for read only entities
+      description: Entity representing a <<resourcePathName|!singularize>>
+      get:
+        description: |
+          Get the <<resourcePathName|!singularize>>
+          with <<resourcePathName|!singularize>>Id =
+          {<<resourcePathName|!singularize>>Id}
+        responses:
+          200:
+            body:
+              application/json:
+                example: |
+                  <<exampleItem>>
+          404:
+            body:
+              application/json:
+                example: |
+                  {"message": "<<resourcePathName|!singularize>> not found" }
+  - entity:
+      usage: This resourceType should be used for any entity
+      description: Entity representing a <<resourcePathName|!singularize>>
+      get:
+        description: |
+          Get the <<resourcePathName|!singularize>>
+          with <<resourcePathName|!singularize>>Id =
+          {<<resourcePathName|!singularize>>Id}
+        responses:
+          200:
+            body:
+              application/json:
+                example: |
+                  <<exampleItem>>
+          404:
+            body:
+              application/json:
+                example: |
+                  {"message": "<<resourcePathName|!singularize>> not found" }
+      put:
+        description: |
+          Update the <<resourcePathName|!singularize>> entity in Icebox.
+        queryParameters:
+          access_token:
+            description: "The access token provided by the authentication application"
+            example: AABBCCDD
+            required: true
+            type: string
+        body:
+          application/json:
+            schema: <<resourcePathName|!singularize>>
+            example: |
+              <<exampleItem>>
+        responses:
+          200:
+            body:
+              application/json:
+                example: |
+                  { "message": "The <<resourcePathName|!singularize>> has been properly updated" }
+      delete:
+        description: |
+          Destroy the <<resourcePathName|!singularize>> entity in Icebox.
+        queryParameters:
+          access_token:
+            description: "The access token provided by the authentication application"
+            example: AABBCCDD
+            required: true
+            type: string
+        responses:
+          200:
+            body:
+              application/json:
+                example: |
+                  { "message": "The <<resourcePathName|!singularize>> has been properly destroyed" }
+
+/consumers:
+  type:
+    collection:
+      exampleCollection: !include samples/consumers.json
+      exampleItem: !include samples/consumer-new.json
+  get:
+    is: [
+          searchable: {description: "with valid searchable fields: nickname", example: "[\"nickname\", \"Captain Crunch\", \"like\"]"},
+          orderable: {fieldsList: "nickname"},
+          pageable
+        ]
+    queryParameters:
+      backer:
+        type: number
+        description: The minimum lended amount
+        example: 5.13
+      debtor:
+        type: number
+        description: The minimum owed amount
+        example: 7.49
+  /{consumerId}:
+    type:
+      entity:
+        exampleItem: !include samples/consumer-retrieve.json
+    /deposits:
+      type:
+        collection:
+          exampleCollection: !include samples/deposits.json
+          exampleItem: !include samples/deposit-new.json
+
+/beverages:
+  type:
+    collection:
+      exampleCollection: !include samples/beverages.json
+      exampleItem: !include samples/beverage-new.json
+  get:
+    is: [
+          searchable: {description: "with valid searchable fields: name", example: "[\"name\", \"Club\", \"like\"]"},
+          orderable: {fieldsList: "category, name, price"},
+          pageable
+        ]
+  /{beverageId}:
+    type:
+      entity:
+        exampleItem: !include samples/beverage-retrieve.json
+
+/withdrawals:
+  type:
+    collection:
+      exampleCollection: !include samples/withdrawals.json
+      exampleItem: !include samples/withdrawal-new.json
+  get:
+    is: [
+          pageable
+        ]

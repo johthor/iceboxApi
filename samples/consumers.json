@@ -1,0 +1,11 @@
+[
+  {
+    "nickname": "Captain Crunch",
+    "balance": 10,
+    "manager": true
+  },
+  {
+    "nickname": "Leroy",
+    "balance": -3.14
+  }
+]

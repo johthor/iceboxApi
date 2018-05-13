@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Beverage",
+  "id": "http://http://chaotikum.org/hackerspace:nbsp/icebox/schemas/beverage.json",
+  "description": "A beverage which resides inside your icebox",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "price": {
+      "type": "number",
+      "minimum": 0,
+      "exclusiveMinimum": true
+    }
+  },
+  "required": [
+    "id",
+    "name",
+    "price"
+  ]
+}
+

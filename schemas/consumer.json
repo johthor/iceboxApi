@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Withdrawal",
+  "id": "http://http://chaotikum.org/hackerspace:nbsp/icebox/schemas/withdrawal.json",
+  "description": "A consumer drinks a beverage",
+  "type": "object",
+  "properties": {
+    "consumer_id": {
+      "type": "integer"
+    },
+    "beverage_id": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "consumer_id",
+    "beverage_id"
+  ]
+}
+
